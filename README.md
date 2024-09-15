@@ -57,7 +57,7 @@ This project uses **Swagger** to document the API endpoints.
 - **DELETE /users/{userID}/links/{linkID}**: Delete a specific URL.
 
 ### **Visit Tracking**
-- **GET /visit/{alias}**: Redirects to the original URL and increments the visit count.
+- **GET /visit/shortURL**: Redirects to the original URL and increments the visit count.
 
 ## **Database**
 The database stores user information, original URLs, and shortened URLs. **Stored procedures** were written in SQL for efficient data management.
