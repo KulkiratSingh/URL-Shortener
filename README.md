@@ -43,6 +43,9 @@ Each time someone clicks on a shortened URL, the app tracks the number of times 
 ## **API Documentation**
 This project uses **Swagger** to document the API endpoints.
 
+![image](https://github.com/user-attachments/assets/d4268b50-b92e-4e99-8630-5ab522447b22)
+
+
 ### **Authentication Endpoints**
 - **POST /login**: Login and authenticate a user using LDAP credentials.
 - **DELETE /delete_user/{userID}**: Delete a user from the system.
