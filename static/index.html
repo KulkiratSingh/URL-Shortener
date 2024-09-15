@@ -5,16 +5,135 @@
     </head>
     <body>
         <div class="container-fluid" id="app">
-            <div class="jumbotron jumbotron-fluid text-center">
-                <div v-if="!authenticated" class="form-group text-center">
+                <div v-if="!authenticated" class="loginBox"> 
+                    <img class="user" src="https://i.ibb.co/yVGxFPR/2.png" height="100px" width="100px">
+                    <h3>Sign In - FCS Credentials</h3>
+                    <form @submit.prevent="login" class="d-flex flex-column">
+                        <div class="inputBox"> 
+                            <input v-model="input.username" id="uname" type="text" name="Username" placeholder="Username"> 
+                            <input v-model="input.password" id="pass" type="password" name="Password" placeholder="Password"> 
+                        </div> 
+                        <button type="submit" class="btn btn-info rounded-pill">Login</button>
+                    </form> 
+
+                </div>
+             
+                <!-- <div v-if="!authenticated" class="form-group text-center">
                     <input class="col-4 mx-auto form-control" type="text" name="username" v-model="input.username" placeholder="Username" />
                     <input class="col-4 mx-auto form-control" type="password" name="password" v-model="input.password" placeholder="Password" />
                     <button class="col-4 btn btn-outline-success" type="button" v-on:click="login()">Login</button>
-                </div>
+                </div> -->
                 <div v-else class="text-center">
-                    <button type="button" class="btn btn-outline-danger" v-on:click="logout()">Logout</button>
+                    <h2 style="color: khaki; padding: 20px;">URL SHORTENER</h2>
+                    <div class="windows">
+                        <div class="left-window">
+                            <div class="add-card">
+                                <form>
+                                    <label for="url">New Link?</label>
+                                    <input style="max-width: 300px;" class="col-4 mx-auto form-control" type="url" name="originalURL" id="originalURL" v-model="input.originalURL" placeholder="https://exampleurl.com" />
+                                </form>
+
+                                <button class="col-4 btn btn-success add-button" type="submit" v-on:click="addURL()">Add</button>
+                            
+                            </div>
+                        </div>
+
+                        <div class="right-window">
+                            <div class="url-links">
+                                <div class="url-link card mb-3" v-for="url in urls">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h5 class="card-title">Original URL</h5>
+                                        </div>
+                                        <p class="card-text">{{ url.url }}</p>
+                                        <hr>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h5 class="card-title">Your Short URL Is:
+                                                <span><a :href="url.alias" class="btn btn-success btn-sm" target="_blank" role="button">{{ url.alias }}</a></span>
+
+                                            </h5>
+                                            <div>
+                                                
+                                                <button v-on:click="editURL(url.short, url.url_id )" type="button" class="btn btn-outline-primary btn-sm" title="Edit Alias" >
+                                                    <i class="bi bi-pencil-fill"></i> Edit
+                                                </button>
+                                                <button type="button" class="btn btn-primary btn-sm" title="Copy to clipboard" v-on:click="copyToClipboard(url.alias)">
+                                                    <i class="bi bi-clipboard"></i> Copy ShortURL
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <p class="card-text">Visited: {{ url.visit_counter }}</p>
+                                        <span style="font-size: 12px; font-style: italic;">Please do a refresh to see the latest visit count if a url is visited </span>
+                                        <div class="text-right">
+                                            <button type="button" class="btn btn-danger btn-sm" v-on:click="deleteURL(url.url_id)">
+                                                <i class="bi bi-trash"></i> Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- <div class="right-window">
+                            <div class="url-links">
+                                    <div class="url-link" v-for="url in urls">
+                                        <p>
+                                            <label class="url-label" name="url-label" id="url-label" for="url-form">URL:</label>
+                                            <a v-bind:href="url.url" name="url-form" id="url-form" style="word-wrap: break-word;">{{ url.url }}</a>
+                                        </p>
+                                        <p>
+                                            <label class="short-label" name="short-label" id="short-label" for="short">Short:</label>
+                                            <a v-bind:href="url.alias" name="short" id="short">{{ url.alias }}</a>
+                                            <button type="button" class="btn btn-primary btn-sm" height="10px" width="10px" title="Copy to clipboard" v-on:click="copyToClipboard(url.alias)"><i class="bi bi-clipboard"></i></button>
+                                        </p>
+                                        <p class="visit-label" name="visit-label" id="visit-label">
+                                            Visited: {{ url.visit_counter }}
+                                        </p>
+                                        
+                                        <button class="btn btn-primary" type="button" v-on:click="editURL(url.short, url.url_id )">Rename</button>
+                                        <button class="btn btn-danger delete-button" type="button" v-on:click="deleteURL(url.url_id)">Delete</button>
+                                    </div>
+                            </div>
+                        </div> -->
+                    </div>
+                    <div class="mt-5">
+                        <button type="button" class="btn btn-info" v-on:click="logout()">Logout</button>
+
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalCenter">
+                            Delete User
+                        </button>
+                    </div>
+                   
+                    
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Delete User</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                            <div class="modal-body">
+                                Are you user you want to delete user <b>{{ this.input.username }} from this app.</b>
+                                <br/>
+                                All the associated data with the user <b>{{ this.input.username }}</b> will be lost.
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-danger" v-on:click="deleteUser()">Yes</button>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
                 </div>
-            </div>
+ 
+                <!-- <div>
+                    <h2 style="color: plum;">URL Shortener By Paul and Kulkirat</h2>
+                </div> -->
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -22,6 +141,8 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
         <script type="text/javascript" src="/static/scripts.js" ></script>
+        <link rel="stylesheet" href="./static/main.css"/>
     </body>
 </html>

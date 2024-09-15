@@ -95,8 +95,6 @@ paths:
                     type: string
                   success:
                     type: boolean
-                  linkID:
-                    type: string
                   userID:
                     type: integer
         '400':
